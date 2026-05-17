@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>perseus — commissions</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ede9e3;
+    --text: #1a1814;
+    --muted: #6b6760;
+    --subtle: #9a9690;
+    --card: rgba(255,255,255,0.52);
+    --card-border: rgba(255,255,255,0.72);
+    --glass: rgba(255,255,255,0.38);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; }
+  .b1 { width: 700px; height: 700px; background: #cfc4b8; top: -150px; right: -100px; }
+  .b2 { width: 550px; height: 550px; background: #bec8b8; bottom: -80px; left: -100px; }
+  .b3 { width: 450px; height: 450px; background: #c8c0d0; top: 45%; right: 15%; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 40px;
+    background: rgba(237,233,227,0.78);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border-bottom: 1px solid rgba(255,255,255,0.65);
+  }
+  .logo { font-size: 1.1rem; font-weight: 500; color: var(--text); text-decoration: none; letter-spacing: -0.01em; text-transform: lowercase; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+  .page { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 120px 40px 100px; }
+
+  .page-header { margin-bottom: 48px; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #3a6b4a;
+    background: rgba(200,230,210,0.6);
+    border: 1px solid rgba(180,220,195,0.8);
+    border-radius: 20px; padding: 5px 14px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 20px;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #3a6b4a; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .page-header h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; text-transform: lowercase; margin-bottom: 10px; }
+  .page-header p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+  /* TIERS */
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 40px; }
+
+  .tier {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    transition: 0.25s;
+  }
+  .tier:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9); }
+  .tier.featured { background: var(--text); color: #ede9e3; border-color: var(--text); }
+  .tier.featured .tier-label,
+  .tier.featured .tier-desc,
+  .tier.featured .feature { color: rgba(237,233,227,0.55); }
+  .tier.featured .sep { border-color: rgba(255,255,255,0.15); }
+
+  .tier-label { font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .tier-name { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .tier-price { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .tier-price sup { font-size: 0.9rem; font-weight: 400; vertical-align: super; }
+  .tier-price sup.plus { font-size: 0.8rem; }
+  .tier-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
+
+  .sep { border: none; border-top: 1px solid rgba(0,0,0,0.09); margin: 18px 0; }
+
+  .features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .feature { font-size: 0.8rem; color: var(--muted); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+  .feature::before { content: '—'; color: var(--subtle); flex-shrink: 0; }
+
+  /* PROCESS */
+  .section-title {
+    font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; text-transform: lowercase;
+    margin-bottom: 20px; margin-top: 48px;
+  }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
+
+  .step {
+    background: var(--glass);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px 18px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+
+  .step-num { font-size: 1.5rem; font-weight: 600; color: rgba(0,0,0,0.12); letter-spacing: -0.02em; margin-bottom: 10px; }
+  .step-title { font-size: 0.82rem; font-weight: 500; margin-bottom: 6px; }
+  .step-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.6; }
+
+  /* TERMS */
+  .terms {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .term-row {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 32px;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .term-row:last-child { border-bottom: none; }
+
+  .term-key { font-size: 0.76rem; font-weight: 500; min-width: 150px; }
+  .term-val { font-size: 0.78rem; color: var(--muted); text-align: right; line-height: 1.5; }
+
+  /* CTA */
+  .cta-card {
+    background: var(--text);
+    border-radius: 16px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    color: #ede9e3;
+  }
+
+  .cta-card h2 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; }
+  .cta-card p { font-size: 0.82rem; color: rgba(237,233,227,0.55); margin-top: 4px; }
+
+  .cta-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 12px 24px;
+    color: #ede9e3;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: 0.2s;
+  }
+  .cta-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
+
+  footer {
+    position: relative; z-index: 1;
+    padding: 32px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    max-width: 820px; margin: 0 auto;
+  }
+  .footer-logo { font-size: 0.95rem; font-weight: 500; text-transform: lowercase; letter-spacing: -0.01em; }
+  .footer-copy { font-size: 0.72rem; color: var(--subtle); }
+
+  @media (max-width: 700px) {
+    nav { padding: 18px 20px; }
+    .page { padding: 100px 20px 80px; }
+    .tiers { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .cta-card { flex-direction: column; gap: 20px; }
+    footer { padding: 28px 20px; }
+    .term-val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="blobs">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="logo">perseus</a>
+  <ul class="nav-links">
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="commissions.html" class="active">Commissions</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="status-pill"><div class="status-dot"></div> Open for commissions</div>
+    <h1>commissions</h1>
+    <p>I take a limited number of commissions each month to keep quality high. All work is original and delivered in full resolution.</p>
+  </div>
+
+  <div class="tiers">
+    <div class="tier">
+      <p class="tier-label">Entry</p>
+      <h2 class="tier-name">Sketch</h2>
+      <div class="tier-price"><sup>$</sup>40<sup class="plus">+</sup></div>
+      <p class="tier-desc">Greyscale sketch, one character, minimal or no background.</p>
+      <hr class="sep">
+      <ul class="features">
+        <li class="feature">1 character</li>
+        <li class="feature">Greyscale only</li>
+        <li class="feature">1 minor revision</li>
+        <li class="feature">5–7 days</li>
+      </ul>
+    </div>
+
+    <div class="tier featured">
+      <p class="tier-label">Most popular</p>
+      <h2 class="tier-name">Colour</h2>
+      <div class="tier-price"><sup>$</sup>90<sup class="plus">+</sup></div>
+      <p class="tier-desc">Full colour illustration, one character with background.</p>
+      <hr class="sep">
+      <ul class="features">
+        <li class="feature">1–2 characters</li>
+        <li class="feature">Full colour + lighting</li>
+        <li class="feature">2 revisions</li>
+        <li class="feature">10–14 days</li>
+      </ul>
+    </div>
+
+    <div class="tier">
+      <p class="tier-label">Premium</p>
+      <h2 class="tier-name">Scene</h2>
+      <div class="tier-price"><sup>$</sup>180<sup class="plus">+</sup></div>
+      <p class="tier-desc">Full scene with complex environment and multiple characters.</p>
+      <hr class="sep">
+      <ul class="features">
+        <li class="feature">2+ characters</li>
+        <li class="feature">Detailed environment</li>
+        <li class="feature">3 revisions</li>
+        <li class="feature">3–4 weeks</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">how it works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Inquiry</div>
+      <p class="step-desc">Send your idea, references, and budget via the contact form. Reply within 48 hrs.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Quote & Deposit</div>
+      <p class="step-desc">Final quote sent. 50% deposit required before work begins.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">WIP Updates</div>
+      <p class="step-desc">Progress previews at sketch, colour rough, and final stages.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">Delivery</div>
+      <p class="step-desc">Full resolution files on remaining payment. PNG, PSD, or both.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">terms</h2>
+  <div class="terms">
+    <div class="term-row"><span class="term-key">Commercial use</span><span class="term-val">Available for an additional fee — ask about rates</span></div>
+    <div class="term-row"><span class="term-key">Refunds</span><span class="term-val">Deposit is non-refundable once sketching begins</span></div>
+    <div class="term-row"><span class="term-key">Credit</span><span class="term-val">Please credit me when posting publicly</span></div>
+    <div class="term-row"><span class="term-key">Resale</span><span class="term-val">Reselling or redistributing my work is not permitted</span></div>
+    <div class="term-row"><span class="term-key">AI training</span><span class="term-val">Commissioned work may not be used to train AI models</span></div>
+    <div class="term-row"><span class="term-key">Won't draw</span><span class="term-val">NSFW, real people without consent, hateful content</span></div>
+  </div>
+
+  <div class="cta-card">
+    <div>
+      <h2>Ready to get started?</h2>
+      <p>Send me a message and we'll talk through your idea.</p>
+    </div>
+    <a href="contact.html" class="cta-btn">Send inquiry →</a>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-logo">perseus</span>
+  <span class="footer-copy">© 2026 perseus</span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>perseus — contact</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ede9e3;
+    --text: #1a1814;
+    --muted: #6b6760;
+    --subtle: #9a9690;
+    --card: rgba(255,255,255,0.52);
+    --card-border: rgba(255,255,255,0.72);
+    --glass: rgba(255,255,255,0.38);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; }
+  .b1 { width: 700px; height: 700px; background: #cfc4b8; top: -150px; right: -100px; }
+  .b2 { width: 550px; height: 550px; background: #bec8b8; bottom: -80px; left: -100px; }
+  .b3 { width: 450px; height: 450px; background: #c8c0d0; top: 45%; right: 15%; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 40px;
+    background: rgba(237,233,227,0.78);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border-bottom: 1px solid rgba(255,255,255,0.65);
+  }
+  .logo { font-size: 1.1rem; font-weight: 500; color: var(--text); text-decoration: none; letter-spacing: -0.01em; text-transform: lowercase; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+  /* LAYOUT */
+  .page {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 40px 80px;
+  }
+
+  .contact-wrap {
+    width: 100%;
+    max-width: 860px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 16px;
+  }
+
+  /* LEFT INFO */
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 40px 36px;
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .info-card h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-transform: lowercase;
+    margin-bottom: 10px;
+  }
+
+  .info-card p {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .info-rows { flex: 1; }
+
+  .info-row {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .info-row:first-child { border-top: 1px solid rgba(0,0,0,0.07); }
+
+  .info-label {
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subtle);
+    margin-bottom: 3px;
+  }
+
+  .info-val {
+    font-size: 0.83rem;
+    color: var(--text);
+  }
+
+  .info-val a { color: var(--text); text-decoration: none; transition: color 0.2s; }
+  .info-val a:hover { color: var(--muted); }
+
+  .socials {
+    display: flex; gap: 16px;
+    margin-top: 28px;
+  }
+  .social { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .social:hover { color: var(--text); }
+
+  /* RIGHT FORM */
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 40px 36px;
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+
+  .form-header {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .form-group { margin-bottom: 22px; }
+
+  .form-group label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.65);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.88rem;
+    color: var(--text);
+    outline: none;
+    transition: 0.2s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    appearance: none;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: #b8b4ae; }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    background: rgba(255,255,255,0.7);
+    border-color: rgba(255,255,255,0.9);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.4);
+  }
+
+  .form-group textarea { resize: none; height: 100px; padding-top: 11px; }
+
+  .form-group select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236b6760' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .submit-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+
+  .submit-note { font-size: 0.74rem; color: var(--subtle); max-width: 180px; line-height: 1.5; }
+
+  .submit-btn {
+    background: var(--text);
+    color: #ede9e3;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .submit-btn:hover { opacity: 0.8; }
+
+  /* SUCCESS */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+  }
+  .success-msg.show { display: block; }
+  .success-msg h3 { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .success-msg p { font-size: 0.83rem; color: var(--muted); }
+
+  footer {
+    position: relative; z-index: 1;
+    padding: 28px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(0,0,0,0.07);
+  }
+  .footer-logo { font-size: 0.95rem; font-weight: 500; text-transform: lowercase; letter-spacing: -0.01em; }
+  .footer-copy { font-size: 0.72rem; color: var(--subtle); }
+
+  @media (max-width: 700px) {
+    nav { padding: 18px 20px; }
+    .page { padding: 100px 20px 60px; align-items: flex-start; }
+    .contact-wrap { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .submit-row { flex-direction: column; gap: 16px; align-items: flex-start; }
+    footer { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="blobs">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="logo">perseus</a>
+  <ul class="nav-links">
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="commissions.html">Commissions</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <div class="contact-wrap">
+
+    <div class="info-card">
+      <div>
+        <h1>say hello.</h1>
+        <p>Whether it's a commission, a collab, or just to share something — I reply to everything.</p>
+        <div class="info-rows">
+          <div class="info-row">
+            <div class="info-label">Email</div>
+            <div class="info-val"><a href="mailto:your@email.com">your@email.com</a></div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Response time</div>
+            <div class="info-val">Within 48 hours</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Commissions</div>
+            <div class="info-val">Open — limited slots</div>
+          </div>
+        </div>
+      </div>
+      <div class="socials">
+        <a href="#" class="social">Twitter</a>
+        <a href="#" class="social">Instagram</a>
+        <a href="#" class="social">ArtStation</a>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <p class="form-header">Send a message</p>
+      <div id="form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="your@email.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select id="subject">
+            <option value="" disabled selected>What's this about?</option>
+            <option>Commission inquiry</option>
+            <option>Collaboration</option>
+            <option>General message</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell me what you're thinking..."></textarea>
+        </div>
+        <div class="submit-row">
+          <p class="submit-note">I'll get back to you as soon as I can.</p>
+          <button class="submit-btn" id="submit-btn">Send <span>→</span></button>
+        </div>
+      </div>
+      <div class="success-msg" id="success">
+        <h3>Message sent.</h3>
+        <p>Thanks — I'll reply within 48 hours.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span class="footer-logo">perseus</span>
+  <span class="footer-copy">© 2026 perseus</span>
+</footer>
+
+<script>
+  document.getElementById('submit-btn').addEventListener('click', () => {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const msg = document.getElementById('message').value.trim();
+    if (!name || !email || !msg) {
+      const btn = document.getElementById('submit-btn');
+      btn.style.transform = 'translateX(-4px)';
+      setTimeout(() => btn.style.transform = '', 180);
+      return;
+    }
+    // Hook up Formspree, Netlify Forms, etc. here
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+  });
+</script>
+</body>
+</html>

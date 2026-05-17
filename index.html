@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>perseus</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ede9e3;
+    --text: #1a1814;
+    --muted: #6b6760;
+    --subtle: #9a9690;
+    --card: rgba(255,255,255,0.52);
+    --card-border: rgba(255,255,255,0.72);
+    --glass: rgba(255,255,255,0.38);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* soft ambient blobs */
+  .blobs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.38;
+  }
+  .b1 { width: 700px; height: 700px; background: #cfc4b8; top: -150px; right: -100px; }
+  .b2 { width: 550px; height: 550px; background: #bec8b8; bottom: -80px; left: -100px; }
+  .b3 { width: 450px; height: 450px; background: #c8c0d0; top: 45%; right: 15%; }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 40px;
+    background: rgba(237,233,227,0.78);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border-bottom: 1px solid rgba(255,255,255,0.65);
+  }
+
+  .logo {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 20px 60px;
+  }
+
+  .container {
+    text-align: center;
+    max-width: 440px;
+    width: 100%;
+  }
+
+  .profile-pic {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2.5px solid var(--card-border);
+    box-shadow:
+      0 0 0 5px rgba(255,255,255,0.35),
+      0 6px 28px rgba(0,0,0,0.09);
+    margin-bottom: 22px;
+    transition: 0.4s ease;
+    background: #d8d0c6;
+  }
+  .profile-pic:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 5px rgba(255,255,255,0.55), 0 10px 36px rgba(0,0,0,0.13);
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .tagline {
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  /* STATS glass card */
+  .stats {
+    display: flex;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .stat {
+    flex: 1;
+    padding: 18px 12px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.55);
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-number {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* LINKS */
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  a.link-btn {
+    background: var(--glass);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px 20px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.7);
+    transition: 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  a.link-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: 0.25s;
+  }
+  a.link-btn:hover::after { background: rgba(255,255,255,0.28); }
+  a.link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.85);
+    border-color: rgba(255,255,255,0.9);
+  }
+
+  .arrow {
+    font-size: 0.85rem;
+    color: var(--subtle);
+    transition: 0.25s;
+  }
+  a.link-btn:hover .arrow { color: var(--text); transform: translateX(4px); }
+
+  .footer {
+    color: var(--subtle);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* PREVIEW STRIP */
+  .strip {
+    position: relative;
+    z-index: 1;
+    padding: 0 40px 80px;
+  }
+
+  .strip-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .strip-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .strip-item {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    position: relative;
+    display: block;
+  }
+
+  .strip-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .strip-item:hover img { transform: scale(1.06); }
+
+  .strip-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26,24,20,0);
+    transition: background 0.3s;
+  }
+  .strip-item:hover .strip-overlay { background: rgba(26,24,20,0.22); }
+
+  @media (max-width: 700px) {
+    nav { padding: 18px 20px; }
+    h1 { font-size: 2rem; }
+    .strip { padding: 0 20px 60px; }
+    .strip-grid { grid-template-columns: repeat(3, 1fr); }
+    .strip-item:nth-child(n+4) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="blobs">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="logo">perseus</a>
+  <ul class="nav-links">
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="commissions.html">Commissions</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <img src="pfp.jpg" alt="perseus" class="profile-pic">
+    <h1>perseus</h1>
+    <div class="tagline">digital illustrator &amp; character artist</div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">15+</div>
+        <div class="stat-label">pieces</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">3+</div>
+        <div class="stat-label">years</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">original</div>
+      </div>
+    </div>
+
+    <div class="links">
+      <a href="gallery.html" class="link-btn">Gallery <span class="arrow">→</span></a>
+      <a href="commissions.html" class="link-btn">Commissions <span class="arrow">→</span></a>
+      <a href="contact.html" class="link-btn">Contact <span class="arrow">→</span></a>
+    </div>
+
+    <div class="footer">© 2026 perseus</div>
+  </div>
+</div>
+
+<div class="strip">
+  <p class="strip-label">Recent work</p>
+  <div class="strip-grid">
+    <a href="gallery.html" class="strip-item"><img src="image1.jpg" alt=""><div class="strip-overlay"></div></a>
+    <a href="gallery.html" class="strip-item"><img src="image4.jpg" alt=""><div class="strip-overlay"></div></a>
+    <a href="gallery.html" class="strip-item"><img src="image8.jpg" alt=""><div class="strip-overlay"></div></a>
+    <a href="gallery.html" class="strip-item"><img src="image11.jpg" alt=""><div class="strip-overlay"></div></a>
+    <a href="gallery.html" class="strip-item"><img src="image15.jpg" alt=""><div class="strip-overlay"></div></a>
+  </div>
+</div>
+
+</body>
+</html>
