@@ -92,7 +92,7 @@ nav {
 }
 .item:hover { box-shadow: 0 10px 36px rgba(0,0,0,0.14); transform: translateY(-3px); }
 
-.item img { width: 100%; display: block; transition: transform 0.5s ease; }
+.item img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
 .item:hover img { transform: scale(1.04); }
 
 .item-overlay {
@@ -128,23 +128,31 @@ nav {
 }
 
 .lb-img-wrap {
-  background: #d8d4cc; display: flex;
-  align-items: center; justify-content: center; overflow: hidden; min-height: 400px;
+  background: #d8d4cc;
+  display: flex;
+  align-items: center; justify-content: center;
+  overflow: hidden; min-height: 400px;
   position: relative;
+}
+.lb-img-wrap img {
+  display: block;
+  max-width: 100%; max-height: 88vh;
+  width: auto; height: auto;
+  object-fit: contain;
+  position: relative; z-index: 1;
 }
 .lb-watermark {
   position: absolute;
-  bottom: 16px; right: 18px;
+  bottom: 14px; right: 16px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.78rem; font-weight: 500;
-  letter-spacing: 0.12em; text-transform: lowercase;
-  color: rgba(255,255,255,0.55);
-  pointer-events: none;
-  user-select: none;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-  z-index: 10;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: lowercase;
+  color: rgba(255,255,255,0.6);
+  pointer-events: none; user-select: none;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.55), 0 0 20px rgba(0,0,0,0.3);
+  z-index: 2;
+  mix-blend-mode: overlay;
 }
-.lb-img-wrap img { width: 100%; height: 100%; object-fit: contain; max-height: 90vh; display: block; }
 
 .lb-info {
   padding: 32px 26px; display: flex; flex-direction: column;
@@ -311,52 +319,52 @@ footer {
     </div>
 
     <div class="item" data-tags="character,scene,concept" data-title="Untitled" data-year="2025" data-desc="Dark supernatural scene — red-eyed character surrounded by chains, skulls and ominous figures. Intense warm palette." data-cat="Character · Scene">
-      <img src="image16.png" alt="">
+      <img src="Image16.png" alt="">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Untitled</div><div class="item-sub">Scene · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,scene" data-title="Writers" data-year="2025" data-desc="Three graffiti writers in a fisheye-lens tunnel, explosive tags behind them. Gritty urban energy." data-cat="Character · Scene">
-      <img src="image17.jpg" alt="Writers">
+      <img src="Image17.jpg" alt="Writers">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Writers</div><div class="item-sub">Scene · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="scene,concept" data-title="Payphone" data-year="2025" data-desc="Monochrome scene — a figure curled in a payphone booth, cigarette in hand. Stark greyscale with strong fisheye distortion." data-cat="Scene · Concept">
-      <img src="image18.jpg" alt="Payphone">
+      <img src="Image18.jpg" alt="Payphone">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Payphone</div><div class="item-sub">Scene · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,concept" data-title="Hell2U" data-year="2025" data-desc="Dark character piece — horned figure with red and purple tones, heavy metal typography and demonic motifs." data-cat="Character · Concept">
-      <img src="image19.jpg" alt="Hell2U">
+      <img src="Image19.jpg" alt="Hell2U">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Hell2U</div><div class="item-sub">Character · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,scene,concept" data-title="Untitled" data-year="2025" data-desc="Chained figure surrounded by a crowd of tortured forms. Intense emotional weight, dark atmospheric palette." data-cat="Scene · Concept">
-      <img src="image20.jpg" alt="">
+      <img src="Image20.jpg" alt="">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Untitled</div><div class="item-sub">Scene · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,scene" data-title="Rain Ride" data-year="2025" data-desc="Two characters on a motorbike under a torn umbrella in the rain. Teal-washed painterly night scene." data-cat="Character · Scene">
-      <img src="image21.jpg" alt="Rain Ride">
+      <img src="Image21.jpg" alt="Rain Ride">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Rain Ride</div><div class="item-sub">Character · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,scene" data-title="Petals" data-year="2025" data-desc="Soft scene — pink-haired character by stone stairs with cherry blossoms falling. Warm and melancholic mood." data-cat="Character · Scene">
-      <img src="image22.jpg" alt="Petals">
+      <img src="Image22.jpg" alt="Petals">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Petals</div><div class="item-sub">Character · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,concept" data-title="Onehara Magazine" data-year="2025" data-desc="Chaotic manga magazine cover — maximalist Japanese typography, wild character, monster hands, neon colour explosion." data-cat="Concept · 2025">
-      <img src="image23.jpg" alt="Onehara Magazine">
+      <img src="Image23.jpg" alt="Onehara Magazine">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Onehara Magazine</div><div class="item-sub">Concept · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,concept" data-title="Mecha" data-year="2025" data-desc="Character with massive mechanical armour erupting behind them. Blue duotone palette, geometric graphic elements." data-cat="Character · Concept">
-      <img src="image24.jpg" alt="Mecha">
+      <img src="Image24.jpg" alt="Mecha">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Mecha</div><div class="item-sub">Character · 2025</div></div></div>
     </div>
 
     <div class="item" data-tags="character,concept" data-title="Crew" data-year="2025" data-desc="Three catgirl characters in a tight monochrome group shot surrounded by industrial clutter. Detailed ink work." data-cat="Character · Concept">
-      <img src="image25.jpg" alt="Crew">
+      <img src="Image25.jpg" alt="Crew">
       <div class="item-overlay"><div class="item-meta"><div class="item-title">Crew</div><div class="item-sub">Character · 2025</div></div></div>
     </div>
 
