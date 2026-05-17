@@ -3,283 +3,317 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>perseus</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<title>melio</title>
+<link rel="icon" type="image/png" href="pfp.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --bg: #ede9e3;
-    --text: #1a1814;
-    --muted: #6b6760;
-    --subtle: #9a9690;
-    --card: rgba(255,255,255,0.52);
-    --card-border: rgba(255,255,255,0.72);
-    --glass: rgba(255,255,255,0.38);
-  }
+:root {
+  --bg: #eceae5;
+  --text: #1a1814;
+  --muted: #6b6760;
+  --subtle: #aaa8a4;
+  --card: rgba(255,255,255,0.48);
+  --border: rgba(255,255,255,0.68);
+  --glass: rgba(255,255,255,0.32);
+}
 
-  html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    opacity: 0;
-    animation: fadeIn 0.5s ease forwards;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
 
-  @keyframes fadeIn { to { opacity: 1; } }
+/* ── AMBIENT BLOBS ── */
+.blobs {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(100px); opacity: 0.32;
+}
+.b1 { width: 800px; height: 800px; background: #cec3b6; top: -200px; right: -150px; }
+.b2 { width: 600px; height: 600px; background: #b8c8b4; bottom: -100px; left: -120px; }
+.b3 { width: 500px; height: 500px; background: #c0b8d0; top: 40%; right: 10%; }
 
-  /* soft ambient blobs */
-  .blobs {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.38;
-  }
-  .b1 { width: 700px; height: 700px; background: #cfc4b8; top: -150px; right: -100px; }
-  .b2 { width: 550px; height: 550px; background: #bec8b8; bottom: -80px; left: -100px; }
-  .b3 { width: 450px; height: 450px; background: #c8c0d0; top: 45%; right: 15%; }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  background: rgba(236,234,229,0.72);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  transition: background 0.3s;
+}
+.logo {
+  font-size: 1.05rem; font-weight: 600;
+  color: var(--text); text-decoration: none;
+  letter-spacing: -0.01em; text-transform: lowercase;
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
 
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 22px 40px;
-    background: rgba(237,233,227,0.78);
-    backdrop-filter: blur(24px) saturate(1.5);
-    -webkit-backdrop-filter: blur(24px) saturate(1.5);
-    border-bottom: 1px solid rgba(255,255,255,0.65);
-  }
+/* ── PARALLAX HERO ── */
+.hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .logo {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text);
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    text-transform: lowercase;
-  }
+/* art strips behind */
+.parallax-bg {
+  position: absolute;
+  inset: -80px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  z-index: 1;
+  will-change: transform;
+}
 
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a {
-    font-size: 0.76rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+.para-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-  /* HERO */
-  .hero {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 120px 20px 60px;
-  }
+/* every other column offset */
+.para-col:nth-child(even) { transform: translateY(-80px); }
+.para-col:nth-child(odd)  { transform: translateY(40px); }
 
-  .container {
-    text-align: center;
-    max-width: 440px;
-    width: 100%;
-  }
+.para-img {
+  width: 100%;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
 
-  .profile-pic {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2.5px solid var(--card-border);
-    box-shadow:
-      0 0 0 5px rgba(255,255,255,0.35),
-      0 6px 28px rgba(0,0,0,0.09);
-    margin-bottom: 22px;
-    transition: 0.4s ease;
-    background: #d8d0c6;
-  }
-  .profile-pic:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 5px rgba(255,255,255,0.55), 0 10px 36px rgba(0,0,0,0.13);
-  }
+.para-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.85) brightness(1.02);
+}
 
-  h1 {
-    font-size: 2.4rem;
-    font-weight: 600;
-    text-transform: lowercase;
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-  }
+/* aspect ratios — tall vertical images */
+.para-img.tall  { aspect-ratio: 2/3; }
+.para-img.short { aspect-ratio: 3/4; }
+.para-img.med   { aspect-ratio: 1/1; }
 
-  .tagline {
-    color: var(--muted);
-    font-size: 0.88rem;
-    font-weight: 300;
-    margin-bottom: 32px;
-  }
+/* frosted glass overlay on bg */
+.hero-frost {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(236,234,229,0.52);
+  backdrop-filter: blur(6px) saturate(1.1);
+  -webkit-backdrop-filter: blur(6px) saturate(1.1);
+}
 
-  /* STATS glass card */
-  .stats {
-    display: flex;
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    backdrop-filter: blur(24px) saturate(1.4);
-    -webkit-backdrop-filter: blur(24px) saturate(1.4);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
+/* centre card */
+.hero-card {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 48px 52px;
+  background: rgba(255,255,255,0.52);
+  border: 1px solid rgba(255,255,255,0.78);
+  border-radius: 28px;
+  backdrop-filter: blur(32px) saturate(1.4);
+  -webkit-backdrop-filter: blur(32px) saturate(1.4);
+  box-shadow:
+    0 8px 48px rgba(0,0,0,0.09),
+    inset 0 1.5px 0 rgba(255,255,255,0.9);
+  max-width: 400px;
+  width: 90%;
+}
 
-  .stat {
-    flex: 1;
-    padding: 18px 12px;
-    text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.55);
-  }
-  .stat:last-child { border-right: none; }
+.pfp {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 0 5px rgba(255,255,255,0.35), 0 6px 24px rgba(0,0,0,0.1);
+  margin-bottom: 18px;
+  display: block;
+  margin-left: auto; margin-right: auto;
+  background: #d8d0c6;
+}
 
-  .stat-number {
-    font-size: 1.35rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
+.hero-name {
+  font-size: 2.2rem; font-weight: 600;
+  letter-spacing: -0.03em; text-transform: lowercase;
+  margin-bottom: 6px;
+}
 
-  .stat-label {
-    font-size: 0.66rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+.hero-tag {
+  font-size: 0.82rem; color: var(--muted);
+  font-weight: 300; margin-bottom: 28px;
+}
 
-  /* LINKS */
-  .links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 30px;
-  }
+/* stats row inside card */
+.stats {
+  display: flex;
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.stat {
+  flex: 1; padding: 14px 10px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.55);
+}
+.stat:last-child { border-right: none; }
+.stat-num { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+.stat-lbl { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
 
-  a.link-btn {
-    background: var(--glass);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 14px 20px;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.88rem;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    backdrop-filter: blur(20px) saturate(1.3);
-    -webkit-backdrop-filter: blur(20px) saturate(1.3);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.7);
-    transition: 0.25s ease;
-    position: relative;
-    overflow: hidden;
-  }
+/* nav links inside card */
+.hero-links { display: flex; flex-direction: column; gap: 9px; }
 
-  a.link-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0);
-    transition: 0.25s;
-  }
-  a.link-btn:hover::after { background: rgba(255,255,255,0.28); }
-  a.link-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.85);
-    border-color: rgba(255,255,255,0.9);
-  }
+.hlink {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 12px;
+  text-decoration: none; color: var(--text);
+  font-size: 0.86rem; font-weight: 400;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+  transition: 0.22s ease;
+}
+.hlink:hover {
+  background: rgba(255,255,255,0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.arr { color: var(--subtle); font-size: 0.8rem; transition: 0.22s; }
+.hlink:hover .arr { color: var(--text); transform: translateX(3px); display: inline-block; }
 
-  .arrow {
-    font-size: 0.85rem;
-    color: var(--subtle);
-    transition: 0.25s;
-  }
-  a.link-btn:hover .arrow { color: var(--text); transform: translateX(4px); }
+/* scroll hint */
+.scroll-hint {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  z-index: 4;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0.5;
+  animation: bob 2.2s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+.scroll-hint span { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.scroll-arrow { width: 1px; height: 28px; background: linear-gradient(to bottom, var(--muted), transparent); }
 
-  .footer {
-    color: var(--subtle);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-  }
+/* ── FEATURED SECTION ── */
+.featured {
+  position: relative; z-index: 10;
+  padding: 80px 40px 100px;
+}
 
-  /* PREVIEW STRIP */
-  .strip {
-    position: relative;
-    z-index: 1;
-    padding: 0 40px 80px;
-  }
+.section-label {
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 24px; text-align: center;
+}
 
-  .strip-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: center;
-    margin-bottom: 16px;
-  }
+/* horizontal scroll strip of featured pieces */
+.feat-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 
-  .strip-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5);
-  }
+.feat-card {
+  position: relative; overflow: hidden;
+  border-radius: 16px;
+  aspect-ratio: 3/4;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  text-decoration: none;
+}
+.feat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.13); }
 
-  .strip-item {
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    position: relative;
-    display: block;
-  }
+.feat-card img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.6s ease;
+}
+.feat-card:hover img { transform: scale(1.05); }
 
-  .strip-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.5s ease;
-  }
-  .strip-item:hover img { transform: scale(1.06); }
+.feat-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(26,24,20,0.6) 0%, transparent 55%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 20px;
+}
 
-  .strip-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(26,24,20,0);
-    transition: background 0.3s;
-  }
-  .strip-item:hover .strip-overlay { background: rgba(26,24,20,0.22); }
+.feat-title {
+  font-size: 0.9rem; font-weight: 500; color: #fff;
+  letter-spacing: -0.01em; margin-bottom: 3px;
+}
+.feat-sub {
+  font-size: 0.65rem; letter-spacing: 0.09em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
 
-  @media (max-width: 700px) {
-    nav { padding: 18px 20px; }
-    h1 { font-size: 2rem; }
-    .strip { padding: 0 20px 60px; }
-    .strip-grid { grid-template-columns: repeat(3, 1fr); }
-    .strip-item:nth-child(n+4) { display: none; }
-  }
+/* view all pill */
+.view-all-wrap { text-align: center; margin-top: 32px; }
+.view-all {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 40px; padding: 11px 24px;
+  font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  transition: 0.22s;
+}
+.view-all:hover { background: rgba(255,255,255,0.7); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 10;
+  padding: 28px 40px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(236,234,229,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.footer-logo { font-size: 0.9rem; font-weight: 600; text-transform: lowercase; letter-spacing: -0.01em; }
+.footer-copy { font-size: 0.7rem; color: var(--subtle); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  nav { padding: 16px 20px; }
+  .parallax-bg { grid-template-columns: repeat(3, 1fr); }
+  .para-col:nth-child(n+4) { display: none; }
+  .hero-card { padding: 36px 28px; }
+  .featured { padding: 60px 20px 80px; }
+  .feat-strip { grid-template-columns: repeat(2, 1fr); }
+  .feat-card:last-child { display: none; }
+  footer { padding: 24px 20px; }
+}
 </style>
 </head>
 <body>
@@ -290,55 +324,143 @@
 </div>
 
 <nav>
-  <a href="index.html" class="logo">perseus</a>
+  <a href="index.html" class="logo">melio</a>
   <ul class="nav-links">
     <li><a href="gallery.html">Gallery</a></li>
-    <li><a href="commissions.html">Commissions</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
 
-<div class="hero">
-  <div class="container">
-    <img src="pfp.jpg" alt="perseus" class="profile-pic">
-    <h1>perseus</h1>
-    <div class="tagline">digital illustrator &amp; character artist</div>
+<!-- PARALLAX HERO -->
+<section class="hero">
+
+  <div class="parallax-bg" id="parallax-bg">
+    <!-- col 1 -->
+    <div class="para-col">
+      <div class="para-img tall"><img src="image1.jpg" alt=""></div>
+      <div class="para-img short"><img src="image6.jpg" alt=""></div>
+      <div class="para-img tall"><img src="image11.jpg" alt=""></div>
+    </div>
+    <!-- col 2 -->
+    <div class="para-col">
+      <div class="para-img short"><img src="image2.jpg" alt=""></div>
+      <div class="para-img tall"><img src="image7.jpg" alt=""></div>
+      <div class="para-img short"><img src="image12.jpg" alt=""></div>
+    </div>
+    <!-- col 3 -->
+    <div class="para-col">
+      <div class="para-img tall"><img src="image3.jpg" alt=""></div>
+      <div class="para-img med"><img src="image8.jpg" alt=""></div>
+      <div class="para-img tall"><img src="image13.jpg" alt=""></div>
+    </div>
+    <!-- col 4 -->
+    <div class="para-col">
+      <div class="para-img short"><img src="image4.jpg" alt=""></div>
+      <div class="para-img tall"><img src="image9.jpg" alt=""></div>
+      <div class="para-img short"><img src="image14.jpg" alt=""></div>
+    </div>
+    <!-- col 5 -->
+    <div class="para-col">
+      <div class="para-img tall"><img src="image5.jpg" alt=""></div>
+      <div class="para-img short"><img src="image10.jpg" alt=""></div>
+      <div class="para-img tall"><img src="image15.jpg" alt=""></div>
+    </div>
+  </div>
+
+  <div class="hero-frost"></div>
+
+  <div class="hero-card">
+    <img src="pfp.png" alt="melio" class="pfp">
+    <div class="hero-name">melio</div>
+    <div class="hero-tag">digital illustrator &amp; character artist</div>
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-number">15+</div>
-        <div class="stat-label">pieces</div>
+        <div class="stat-num">15+</div>
+        <div class="stat-lbl">pieces</div>
       </div>
       <div class="stat">
-        <div class="stat-number">3+</div>
-        <div class="stat-label">years</div>
+        <div class="stat-num">3+</div>
+        <div class="stat-lbl">years</div>
       </div>
       <div class="stat">
-        <div class="stat-number">100%</div>
-        <div class="stat-label">original</div>
+        <div class="stat-num">100%</div>
+        <div class="stat-lbl">original</div>
       </div>
     </div>
 
-    <div class="links">
-      <a href="gallery.html" class="link-btn">Gallery <span class="arrow">→</span></a>
-      <a href="commissions.html" class="link-btn">Commissions <span class="arrow">→</span></a>
-      <a href="contact.html" class="link-btn">Contact <span class="arrow">→</span></a>
+    <div class="hero-links">
+      <a href="gallery.html" class="hlink">Gallery <span class="arr">→</span></a>
+      <a href="contact.html" class="hlink">Contact <span class="arr">→</span></a>
     </div>
-
-    <div class="footer">© 2026 perseus</div>
   </div>
-</div>
 
-<div class="strip">
-  <p class="strip-label">Recent work</p>
-  <div class="strip-grid">
-    <a href="gallery.html" class="strip-item"><img src="image1.jpg" alt=""><div class="strip-overlay"></div></a>
-    <a href="gallery.html" class="strip-item"><img src="image4.jpg" alt=""><div class="strip-overlay"></div></a>
-    <a href="gallery.html" class="strip-item"><img src="image8.jpg" alt=""><div class="strip-overlay"></div></a>
-    <a href="gallery.html" class="strip-item"><img src="image11.jpg" alt=""><div class="strip-overlay"></div></a>
-    <a href="gallery.html" class="strip-item"><img src="image15.jpg" alt=""><div class="strip-overlay"></div></a>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-arrow"></div>
   </div>
-</div>
+</section>
 
+<!-- FEATURED -->
+<section class="featured">
+  <p class="section-label">Selected works</p>
+  <div class="feat-strip">
+    <a href="gallery.html" class="feat-card">
+      <img src="image15.jpg" alt="Flowers">
+      <div class="feat-overlay">
+        <div class="feat-title">Flowers</div>
+        <div class="feat-sub">Character · 2025</div>
+      </div>
+    </a>
+    <a href="gallery.html" class="feat-card">
+      <img src="image1.jpg" alt="To U Punk!">
+      <div class="feat-overlay">
+        <div class="feat-title">To U Punk!</div>
+        <div class="feat-sub">Character · 2025</div>
+      </div>
+    </a>
+    <a href="gallery.html" class="feat-card">
+      <img src="image11.jpg" alt="Writer">
+      <div class="feat-overlay">
+        <div class="feat-title">Writer</div>
+        <div class="feat-sub">Scene · 2024</div>
+      </div>
+    </a>
+  </div>
+  <div class="view-all-wrap">
+    <a href="gallery.html" class="view-all">View all works →</a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">melio</span>
+  <span class="footer-copy">© 2026 melio</span>
+</footer>
+
+<script>
+  // Parallax on mouse move
+  const bg = document.getElementById('parallax-bg');
+  let tX = 0, tY = 0, cX = 0, cY = 0;
+
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    tX = (e.clientX - cx) / cx * -18;
+    tY = (e.clientY - cy) / cy * -12;
+  });
+
+  // Scroll parallax
+  window.addEventListener('scroll', () => {
+    tY += window.scrollY * 0.04;
+  });
+
+  function animate() {
+    cX += (tX - cX) * 0.06;
+    cY += (tY - cY) * 0.06;
+    bg.style.transform = `translate(${cX}px, ${cY}px)`;
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
 </body>
 </html>
