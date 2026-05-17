@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>melio</title>
+<title>melio — gallery</title>
 <link rel="icon" type="image/png" href="pfp.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -19,33 +19,22 @@
   --glass: rgba(255,255,255,0.32);
 }
 
-html { scroll-behavior: smooth; }
-
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 300;
-  overflow-x: hidden;
   opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
+  animation: fadeIn 0.5s ease forwards;
 }
 @keyframes fadeIn { to { opacity: 1; } }
 
-/* ── AMBIENT BLOBS ── */
-.blobs {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none; overflow: hidden;
-}
-.blob {
-  position: absolute; border-radius: 50%;
-  filter: blur(100px); opacity: 0.32;
-}
+.blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.32; }
 .b1 { width: 800px; height: 800px; background: #cec3b6; top: -200px; right: -150px; }
 .b2 { width: 600px; height: 600px; background: #b8c8b4; bottom: -100px; left: -120px; }
 .b3 { width: 500px; height: 500px; background: #c0b8d0; top: 40%; right: 10%; }
 
-/* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -54,266 +43,165 @@ nav {
   backdrop-filter: blur(28px) saturate(1.6);
   -webkit-backdrop-filter: blur(28px) saturate(1.6);
   border-bottom: 1px solid rgba(255,255,255,0.6);
-  transition: background 0.3s;
 }
-.logo {
-  font-size: 1.05rem; font-weight: 600;
-  color: var(--text); text-decoration: none;
-  letter-spacing: -0.01em; text-transform: lowercase;
-}
+.logo { font-size: 1.05rem; font-weight: 600; color: var(--text); text-decoration: none; letter-spacing: -0.01em; text-transform: lowercase; }
 .nav-links { display: flex; gap: 28px; list-style: none; }
-.nav-links a {
-  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); text-decoration: none; transition: color 0.2s;
-}
+.nav-links a { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
 .nav-links a:hover, .nav-links a.active { color: var(--text); }
 
-/* ── PARALLAX HERO ── */
-.hero {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* PAGE HEADER */
+.page-header {
+  position: relative; z-index: 1;
+  padding: 110px 40px 24px;
+  display: flex; align-items: baseline; justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
 }
+.page-header h1 { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.02em; text-transform: lowercase; }
+#count { font-size: 0.73rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
-/* art strips behind */
-.parallax-bg {
-  position: absolute;
-  inset: -80px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-  z-index: 1;
-  will-change: transform;
+/* FILTERS */
+.filters {
+  position: relative; z-index: 1;
+  display: flex; gap: 7px; padding: 18px 40px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  flex-wrap: wrap;
 }
-
-.para-col {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* every other column offset */
-.para-col:nth-child(even) { transform: translateY(-80px); }
-.para-col:nth-child(odd)  { transform: translateY(40px); }
-
-.para-img {
-  width: 100%;
-  flex-shrink: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-
-.para-img img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: saturate(0.85) brightness(1.02);
-}
-
-/* aspect ratios — tall vertical images */
-.para-img.tall  { aspect-ratio: 2/3; }
-.para-img.short { aspect-ratio: 3/4; }
-.para-img.med   { aspect-ratio: 1/1; }
-
-/* frosted glass overlay on bg */
-.hero-frost {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: rgba(236,234,229,0.52);
-  backdrop-filter: blur(6px) saturate(1.1);
-  -webkit-backdrop-filter: blur(6px) saturate(1.1);
-}
-
-/* centre card */
-.hero-card {
-  position: relative;
-  z-index: 3;
-  text-align: center;
-  padding: 48px 52px;
-  background: rgba(255,255,255,0.52);
-  border: 1px solid rgba(255,255,255,0.78);
-  border-radius: 28px;
-  backdrop-filter: blur(32px) saturate(1.4);
-  -webkit-backdrop-filter: blur(32px) saturate(1.4);
-  box-shadow:
-    0 8px 48px rgba(0,0,0,0.09),
-    inset 0 1.5px 0 rgba(255,255,255,0.9);
-  max-width: 400px;
-  width: 90%;
-}
-
-.pfp {
-  width: 96px; height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2.5px solid rgba(255,255,255,0.85);
-  box-shadow: 0 0 0 5px rgba(255,255,255,0.35), 0 6px 24px rgba(0,0,0,0.1);
-  margin-bottom: 18px;
-  display: block;
-  margin-left: auto; margin-right: auto;
-  background: #d8d0c6;
-}
-
-.hero-name {
-  font-size: 2.2rem; font-weight: 600;
-  letter-spacing: -0.03em; text-transform: lowercase;
-  margin-bottom: 6px;
-}
-
-.hero-tag {
-  font-size: 0.82rem; color: var(--muted);
-  font-weight: 300; margin-bottom: 28px;
-}
-
-/* stats row inside card */
-.stats {
-  display: flex;
-  background: rgba(255,255,255,0.45);
-  border: 1px solid rgba(255,255,255,0.65);
-  border-radius: 14px;
-  overflow: hidden;
-  margin-bottom: 18px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
-}
-.stat {
-  flex: 1; padding: 14px 10px; text-align: center;
-  border-right: 1px solid rgba(255,255,255,0.55);
-}
-.stat:last-child { border-right: none; }
-.stat-num { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
-.stat-lbl { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
-
-/* nav links inside card */
-.hero-links { display: flex; flex-direction: column; gap: 9px; }
-
-.hlink {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 18px;
-  background: rgba(255,255,255,0.35);
-  border: 1px solid rgba(255,255,255,0.65);
-  border-radius: 12px;
-  text-decoration: none; color: var(--text);
-  font-size: 0.86rem; font-weight: 400;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
-  transition: 0.22s ease;
-}
-.hlink:hover {
-  background: rgba(255,255,255,0.6);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
-}
-.arr { color: var(--subtle); font-size: 0.8rem; transition: 0.22s; }
-.hlink:hover .arr { color: var(--text); transform: translateX(3px); display: inline-block; }
-
-/* scroll hint */
-.scroll-hint {
-  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-  z-index: 4;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  opacity: 0.5;
-  animation: bob 2.2s ease-in-out infinite;
-}
-@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
-.scroll-hint span { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.scroll-arrow { width: 1px; height: 28px; background: linear-gradient(to bottom, var(--muted), transparent); }
-
-/* ── FEATURED SECTION ── */
-.featured {
-  position: relative; z-index: 10;
-  padding: 80px 40px 100px;
-}
-
-.section-label {
-  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 24px; text-align: center;
-}
-
-/* horizontal scroll strip of featured pieces */
-.feat-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.feat-card {
-  position: relative; overflow: hidden;
-  border-radius: 16px;
-  aspect-ratio: 3/4;
-  cursor: pointer;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  text-decoration: none;
-}
-.feat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.13); }
-
-.feat-card img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 0.6s ease;
-}
-.feat-card:hover img { transform: scale(1.05); }
-
-.feat-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(26,24,20,0.6) 0%, transparent 55%);
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 20px;
-}
-
-.feat-title {
-  font-size: 0.9rem; font-weight: 500; color: #fff;
-  letter-spacing: -0.01em; margin-bottom: 3px;
-}
-.feat-sub {
-  font-size: 0.65rem; letter-spacing: 0.09em; text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-}
-
-/* view all pill */
-.view-all-wrap { text-align: center; margin-top: 32px; }
-.view-all {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 40px; padding: 11px 24px;
-  font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text); text-decoration: none;
+.filter-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--muted);
+  background: var(--glass); border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 14px; cursor: pointer;
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 2px 14px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-  transition: 0.22s;
+  transition: 0.18s;
 }
-.view-all:hover { background: rgba(255,255,255,0.7); transform: translateY(-2px); }
+.filter-btn:hover { color: var(--text); background: rgba(255,255,255,0.52); }
+.filter-btn.active { background: var(--text); color: #eceae5; border-color: var(--text); }
 
-/* ── FOOTER ── */
+/* MASONRY */
+.gallery-wrap { position: relative; z-index: 1; padding: 28px 40px 100px; }
+
+.masonry { columns: 4; column-gap: 10px; }
+
+.item {
+  break-inside: avoid; margin-bottom: 10px;
+  cursor: pointer; position: relative; overflow: hidden;
+  border-radius: 12px; display: block;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.item:hover { box-shadow: 0 10px 36px rgba(0,0,0,0.14); transform: translateY(-3px); }
+
+.item img { width: 100%; display: block; transition: transform 0.5s ease; }
+.item:hover img { transform: scale(1.04); }
+
+.item-overlay {
+  position: absolute; inset: 0;
+  background: rgba(26,24,20,0);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 14px; transition: background 0.32s; border-radius: 12px;
+}
+.item:hover .item-overlay { background: rgba(26,24,20,0.48); }
+
+.item-meta { transform: translateY(6px); opacity: 0; transition: 0.28s; }
+.item:hover .item-meta { transform: translateY(0); opacity: 1; }
+.item-title { font-size: 0.82rem; font-weight: 500; color: #fff; }
+.item-sub { font-size: 0.63rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+/* LIGHTBOX */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(236,234,229,0.68);
+  backdrop-filter: blur(36px) saturate(1.2);
+  -webkit-backdrop-filter: blur(36px) saturate(1.2);
+  align-items: center; justify-content: center; padding: 32px;
+}
+.lightbox.open { display: flex; }
+
+.lb-inner {
+  display: grid; grid-template-columns: 1fr 290px;
+  max-width: 1060px; width: 100%; max-height: 90vh;
+  border-radius: 22px; overflow: hidden;
+  background: var(--card); border: 1px solid var(--border);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.14), inset 0 1.5px 0 rgba(255,255,255,0.85);
+  backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+}
+
+.lb-img-wrap {
+  background: #d8d4cc; display: flex;
+  align-items: center; justify-content: center; overflow: hidden; min-height: 400px;
+  position: relative;
+}
+.lb-watermark {
+  position: absolute;
+  bottom: 16px; right: 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: lowercase;
+  color: rgba(255,255,255,0.55);
+  pointer-events: none;
+  user-select: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+.lb-img-wrap img { width: 100%; height: 100%; object-fit: contain; max-height: 90vh; display: block; }
+
+.lb-info {
+  padding: 32px 26px; display: flex; flex-direction: column;
+  background: rgba(255,255,255,0.55);
+  border-left: 1px solid rgba(255,255,255,0.65); overflow-y: auto;
+}
+.lb-cat { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.lb-title { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 10px; }
+.lb-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.72; flex: 1; }
+.lb-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 20px; }
+.lb-tag {
+  font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(0,0,0,0.09); border-radius: 6px; padding: 3px 9px;
+}
+
+.lb-close {
+  position: absolute; top: 18px; right: 22px;
+  background: var(--card); border: 1px solid var(--border);
+  backdrop-filter: blur(16px); color: var(--text);
+  width: 36px; height: 36px; border-radius: 50%; font-size: 0.95rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: 0.2s;
+}
+.lb-close:hover { background: rgba(255,255,255,0.88); }
+
+.lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: var(--card); border: 1px solid var(--border);
+  backdrop-filter: blur(16px); color: var(--text);
+  width: 38px; height: 38px; border-radius: 50%; font-size: 0.95rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: 0.2s;
+}
+.lb-nav:hover { background: rgba(255,255,255,0.88); }
+.lb-prev { left: 14px; }
+.lb-next { right: 14px; }
+
 footer {
   position: relative; z-index: 10;
   padding: 28px 40px;
-  border-top: 1px solid rgba(0,0,0,0.07);
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(236,234,229,0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0,0,0,0.07);
 }
 .footer-logo { font-size: 0.9rem; font-weight: 600; text-transform: lowercase; letter-spacing: -0.01em; }
 .footer-copy { font-size: 0.7rem; color: var(--subtle); }
 
-/* ── RESPONSIVE ── */
+@media (max-width: 1000px) { .masonry { columns: 3; } }
 @media (max-width: 700px) {
   nav { padding: 16px 20px; }
-  .parallax-bg { grid-template-columns: repeat(3, 1fr); }
-  .para-col:nth-child(n+4) { display: none; }
-  .hero-card { padding: 36px 28px; }
-  .featured { padding: 60px 20px 80px; }
-  .feat-strip { grid-template-columns: repeat(2, 1fr); }
-  .feat-card:last-child { display: none; }
+  .page-header, .filters, .gallery-wrap { padding-left: 20px; padding-right: 20px; }
+  .masonry { columns: 2; }
+  .lb-inner { grid-template-columns: 1fr; }
+  .lb-info { display: none; }
   footer { padding: 24px 20px; }
 }
+@media (max-width: 440px) { .masonry { columns: 1; } }
 </style>
 </head>
 <body>
@@ -326,111 +214,173 @@ footer {
 <nav>
   <a href="index.html" class="logo">melio</a>
   <ul class="nav-links">
-    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
 
-<!-- PARALLAX HERO -->
-<section class="hero">
+<div class="page-header">
+  <h1>gallery</h1>
+  <span id="count">25 pieces</span>
+</div>
 
-  <div class="parallax-bg" id="parallax-bg">
-    <!-- col 1 -->
-    <div class="para-col">
-      <div class="para-img tall"><img src="image1.jpg" alt=""></div>
-      <div class="para-img short"><img src="image6.jpg" alt=""></div>
-      <div class="para-img tall"><img src="image11.jpg" alt=""></div>
-    </div>
-    <!-- col 2 -->
-    <div class="para-col">
-      <div class="para-img short"><img src="image2.jpg" alt=""></div>
-      <div class="para-img tall"><img src="image7.jpg" alt=""></div>
-      <div class="para-img short"><img src="image12.jpg" alt=""></div>
-    </div>
-    <!-- col 3 -->
-    <div class="para-col">
-      <div class="para-img tall"><img src="image3.jpg" alt=""></div>
-      <div class="para-img med"><img src="image8.jpg" alt=""></div>
-      <div class="para-img tall"><img src="image13.jpg" alt=""></div>
-    </div>
-    <!-- col 4 -->
-    <div class="para-col">
-      <div class="para-img short"><img src="image4.jpg" alt=""></div>
-      <div class="para-img tall"><img src="image9.jpg" alt=""></div>
-      <div class="para-img short"><img src="image14.jpg" alt=""></div>
-    </div>
-    <!-- col 5 -->
-    <div class="para-col">
-      <div class="para-img tall"><img src="image5.jpg" alt=""></div>
-      <div class="para-img short"><img src="image10.jpg" alt=""></div>
-      <div class="para-img tall"><img src="image15.jpg" alt=""></div>
-    </div>
-  </div>
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="character">Character</button>
+  <button class="filter-btn" data-filter="scene">Scene</button>
+  <button class="filter-btn" data-filter="concept">Concept</button>
+  <button class="filter-btn" data-filter="commission">Commission</button>
+</div>
 
-  <div class="hero-frost"></div>
+<div class="gallery-wrap">
+  <div class="masonry" id="masonry">
 
-  <div class="hero-card">
-    <img src="pfp.png" alt="melio" class="pfp">
-    <div class="hero-name">melio</div>
-    <div class="hero-tag">digital illustrator &amp; character artist</div>
-
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-num">15+</div>
-        <div class="stat-lbl">pieces</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3+</div>
-        <div class="stat-lbl">years</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">100%</div>
-        <div class="stat-lbl">original</div>
-      </div>
-    </div>
-
-    <div class="hero-links">
-      <a href="gallery.html" class="hlink">Gallery <span class="arr">→</span></a>
-      <a href="contact.html" class="hlink">Contact <span class="arr">→</span></a>
-    </div>
-  </div>
-
-  <div class="scroll-hint">
-    <span>scroll</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</section>
-
-<!-- FEATURED -->
-<section class="featured">
-  <p class="section-label">Selected works</p>
-  <div class="feat-strip">
-    <a href="gallery.html" class="feat-card">
-      <img src="image15.jpg" alt="Flowers">
-      <div class="feat-overlay">
-        <div class="feat-title">Flowers</div>
-        <div class="feat-sub">Character · 2025</div>
-      </div>
-    </a>
-    <a href="gallery.html" class="feat-card">
+    <div class="item" data-tags="character,scene" data-title="To U Punk!" data-year="2025" data-desc="High-energy punk character piece — chaotic maximalist composition with graffiti elements and bold warm tones." data-cat="Character · Scene">
       <img src="image1.jpg" alt="To U Punk!">
-      <div class="feat-overlay">
-        <div class="feat-title">To U Punk!</div>
-        <div class="feat-sub">Character · 2025</div>
-      </div>
-    </a>
-    <a href="gallery.html" class="feat-card">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">To U Punk!</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="scene,concept" data-title="Untitled" data-year="2025" data-desc="Dark atmospheric piece — a figure in a tense moment rendered in deep blues and red." data-cat="Scene">
+      <img src="image2.jpg" alt="">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Untitled</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="No Heaven No Hell" data-year="2025" data-desc="Layered psychedelic composition — figure dissolving into a dreamlike cityscape. Pastel palette with explosive linework." data-cat="Character · Scene">
+      <img src="image3.jpg" alt="No Heaven No Hell">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">No Heaven No Hell</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,concept" data-title="Chari Kaeye!" data-year="2025" data-desc="Faux manga cover — multiple characters, heavy Japanese typography, halftone textures. Editorial layout piece." data-cat="Character · Concept">
+      <img src="image4.jpg" alt="Chari Kaeye!">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Chari Kaeye!</div><div class="item-sub">Concept · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,concept" data-title="Cross" data-year="2024" data-desc="Unsettling interior portrait — wide-eyed figure clutching a cross in a dimly lit ornate hall. Deep purple monochrome." data-cat="Character · Concept">
+      <img src="image5.jpg" alt="Cross">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Cross</div><div class="item-sub">Character · 2024</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,commission" data-title="Mint" data-year="2025" data-desc="Commission — catgirl character in punk attire, teal duotone palette with bold red halftone accents." data-cat="Commission · 2025">
+      <img src="image6.jpg" alt="Mint">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Mint</div><div class="item-sub">Commission · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character" data-title="Summer" data-year="2025" data-desc="Clean character study — heavily tattooed figure against stark white. Intricate detail work, cool desaturated palette." data-cat="Character · 2025">
+      <img src="image7.jpg" alt="Summer">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Summer</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="scene" data-title="Rooftop" data-year="2025" data-desc="Two figures above a sprawling city. Strong perspective, rich teal sky, cinematic energy." data-cat="Scene · 2025">
+      <img src="image8.jpg" alt="Rooftop">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Rooftop</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="Grass" data-year="2024" data-desc="Warm slice-of-life moment — two school-uniform characters close on grass. Expressive body language, golden light." data-cat="Character · Scene">
+      <img src="image9.jpg" alt="Grass">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Grass</div><div class="item-sub">Character · 2024</div></div></div>
+    </div>
+
+    <div class="item" data-tags="scene,concept" data-title="Burst" data-year="2025" data-desc="High-intensity action — crimson and purple chaos, a character fighting through monstrous forms. Explosive brushwork." data-cat="Scene · Concept">
+      <img src="image10.jpg" alt="Burst">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Burst</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="Writer" data-year="2024" data-desc="Graffiti writer perched above a circular urban world — fisheye perspective, dense environmental detail, red sky." data-cat="Character · Scene">
       <img src="image11.jpg" alt="Writer">
-      <div class="feat-overlay">
-        <div class="feat-title">Writer</div>
-        <div class="feat-sub">Scene · 2024</div>
-      </div>
-    </a>
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Writer</div><div class="item-sub">Character · 2024</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character" data-title="Winter" data-year="2024" data-desc="Soft wintery portrait — plaid scarf, painterly blue snowscape. Warm expression against cold tones." data-cat="Character · 2024">
+      <img src="image12.jpg" alt="Winter">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Winter</div><div class="item-sub">Character · 2024</div></div></div>
+    </div>
+
+    <div class="item" data-tags="concept,character" data-title="BB on My Beat" data-year="2024" data-desc="Album cover illustration — goth-alt aesthetic, multiple figures, giant creature looming. Dark teal with punk layout." data-cat="Concept · 2024">
+      <img src="image13.jpg" alt="BB on My Beat">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">BB on My Beat</div><div class="item-sub">Concept · 2024</div></div></div>
+    </div>
+
+    <div class="item" data-tags="scene,character" data-title="404" data-year="2024" data-desc="Top-down bedroom scene — figure surrounded by clutter, cassettes, posters. Rich storytelling in every corner." data-cat="Scene · 2024">
+      <img src="image14.jpg" alt="404">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">404</div><div class="item-sub">Scene · 2024</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="Flowers" data-year="2025" data-desc="Intimate interior portrait — dark-haired woman in white holding wildflowers by a bright window. Soft painterly brushwork." data-cat="Character · Scene">
+      <img src="image15.jpg" alt="Flowers">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Flowers</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene,concept" data-title="Untitled" data-year="2025" data-desc="Dark supernatural scene — red-eyed character surrounded by chains, skulls and ominous figures. Intense warm palette." data-cat="Character · Scene">
+      <img src="image16.png" alt="">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Untitled</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="Writers" data-year="2025" data-desc="Three graffiti writers in a fisheye-lens tunnel, explosive tags behind them. Gritty urban energy." data-cat="Character · Scene">
+      <img src="image17.jpg" alt="Writers">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Writers</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="scene,concept" data-title="Payphone" data-year="2025" data-desc="Monochrome scene — a figure curled in a payphone booth, cigarette in hand. Stark greyscale with strong fisheye distortion." data-cat="Scene · Concept">
+      <img src="image18.jpg" alt="Payphone">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Payphone</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,concept" data-title="Hell2U" data-year="2025" data-desc="Dark character piece — horned figure with red and purple tones, heavy metal typography and demonic motifs." data-cat="Character · Concept">
+      <img src="image19.jpg" alt="Hell2U">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Hell2U</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene,concept" data-title="Untitled" data-year="2025" data-desc="Chained figure surrounded by a crowd of tortured forms. Intense emotional weight, dark atmospheric palette." data-cat="Scene · Concept">
+      <img src="image20.jpg" alt="">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Untitled</div><div class="item-sub">Scene · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="Rain Ride" data-year="2025" data-desc="Two characters on a motorbike under a torn umbrella in the rain. Teal-washed painterly night scene." data-cat="Character · Scene">
+      <img src="image21.jpg" alt="Rain Ride">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Rain Ride</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,scene" data-title="Petals" data-year="2025" data-desc="Soft scene — pink-haired character by stone stairs with cherry blossoms falling. Warm and melancholic mood." data-cat="Character · Scene">
+      <img src="image22.jpg" alt="Petals">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Petals</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,concept" data-title="Onehara Magazine" data-year="2025" data-desc="Chaotic manga magazine cover — maximalist Japanese typography, wild character, monster hands, neon colour explosion." data-cat="Concept · 2025">
+      <img src="image23.jpg" alt="Onehara Magazine">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Onehara Magazine</div><div class="item-sub">Concept · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,concept" data-title="Mecha" data-year="2025" data-desc="Character with massive mechanical armour erupting behind them. Blue duotone palette, geometric graphic elements." data-cat="Character · Concept">
+      <img src="image24.jpg" alt="Mecha">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Mecha</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
+    <div class="item" data-tags="character,concept" data-title="Crew" data-year="2025" data-desc="Three catgirl characters in a tight monochrome group shot surrounded by industrial clutter. Detailed ink work." data-cat="Character · Concept">
+      <img src="image25.jpg" alt="Crew">
+      <div class="item-overlay"><div class="item-meta"><div class="item-title">Crew</div><div class="item-sub">Character · 2025</div></div></div>
+    </div>
+
   </div>
-  <div class="view-all-wrap">
-    <a href="gallery.html" class="view-all">View all works →</a>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close">✕</button>
+  <button class="lb-nav lb-prev" id="lb-prev">←</button>
+  <button class="lb-nav lb-next" id="lb-next">→</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap">
+      <img id="lb-img" src="" alt="">
+      <div class="lb-watermark">melio</div>
+    </div>
+    <div class="lb-info">
+      <div class="lb-cat" id="lb-cat"></div>
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-desc" id="lb-desc"></div>
+      <div class="lb-tags" id="lb-tags"></div>
+    </div>
   </div>
-</section>
+</div>
 
 <footer>
   <span class="footer-logo">melio</span>
@@ -438,29 +388,59 @@ footer {
 </footer>
 
 <script>
-  // Parallax on mouse move
-  const bg = document.getElementById('parallax-bg');
-  let tX = 0, tY = 0, cX = 0, cY = 0;
+const items = Array.from(document.querySelectorAll('.item'));
+let visible = [...items], current = 0;
 
-  document.addEventListener('mousemove', e => {
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    tX = (e.clientX - cx) / cx * -18;
-    tY = (e.clientY - cy) / cy * -12;
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    visible = [];
+    items.forEach(item => {
+      const show = f === 'all' || item.dataset.tags.split(',').includes(f);
+      item.style.display = show ? '' : 'none';
+      if (show) visible.push(item);
+    });
+    document.getElementById('count').textContent = visible.length + ' pieces';
   });
+});
 
-  // Scroll parallax
-  window.addEventListener('scroll', () => {
-    tY += window.scrollY * 0.04;
+const lb = document.getElementById('lightbox');
+
+function openLB(idx) {
+  current = idx;
+  const item = visible[idx];
+  document.getElementById('lb-img').src = item.querySelector('img').src;
+  document.getElementById('lb-title').textContent = item.dataset.title;
+  document.getElementById('lb-cat').textContent = item.dataset.cat + ' · ' + item.dataset.year;
+  document.getElementById('lb-desc').textContent = item.dataset.desc;
+  const tagsEl = document.getElementById('lb-tags');
+  tagsEl.innerHTML = '';
+  item.dataset.tags.split(',').forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'lb-tag'; s.textContent = t.trim(); tagsEl.appendChild(s);
   });
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
-  function animate() {
-    cX += (tX - cX) * 0.06;
-    cY += (tY - cY) * 0.06;
-    bg.style.transform = `translate(${cX}px, ${cY}px)`;
-    requestAnimationFrame(animate);
-  }
-  animate();
+function closeLB() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+
+items.forEach(item => {
+  item.addEventListener('click', () => { const vi = visible.indexOf(item); if (vi !== -1) openLB(vi); });
+});
+
+document.getElementById('lb-close').addEventListener('click', closeLB);
+document.getElementById('lb-prev').addEventListener('click', () => openLB((current - 1 + visible.length) % visible.length));
+document.getElementById('lb-next').addEventListener('click', () => openLB((current + 1) % visible.length));
+lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowLeft') openLB((current - 1 + visible.length) % visible.length);
+  if (e.key === 'ArrowRight') openLB((current + 1) % visible.length);
+});
 </script>
 </body>
 </html>
